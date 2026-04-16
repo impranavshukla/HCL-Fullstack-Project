@@ -288,7 +288,7 @@ Update-Database
 
 ## 👥 Team Singularity
 
-**Team Name:** *Singularity* 🚀
+**Team Name:** *Singularity* 
 
 ### 👨‍💻 Members
 
@@ -311,5 +311,4 @@ This project demonstrates a **real-world scalable booking system** with clean ar
 
 ```
 
----
 
