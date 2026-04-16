@@ -125,7 +125,7 @@ namespace WebApplication1.Controllers
                 return BadRequest("Check-out date must be after check-in date.");
             }
 
-            var customerExists = await _context.Users.AnyAsync(u => u.UserId == booking.CustomerId);
+            var customerExists = await _context.Users.AnyAsync(u => u.user_id == booking.CustomerId);
             if (!customerExists)
             {
                 return BadRequest("Invalid CustomerId. Customer does not exist.");
