@@ -1,101 +1,82 @@
-<div class="admin-layout-container">
-  <!-- Sidebar Navigation -->
+<div class="admin-layout-wrapper">
+  
+  <!-- Left Side Navigation -->
   <aside class="admin-sidebar">
-    <div class="sidebar-header">
+    <div class="sidebar-brand">
       <div class="logo">
         <span class="icon">🏨</span>
-        <span class="text">Hotel<span class="highlight">Admin</span></span>
+        <span class="text">HotelAdmin</span>
       </div>
     </div>
     
-    <div class="user-profile">
-      <img src="https://ui-avatars.com/api/?name=Admin+Manager&background=4F46E5&color=fff" alt="Admin" class="avatar">
-      <div class="user-info">
-        <span class="user-name">Admin Manager</span>
-        <span class="user-role">Super Admin</span>
-      </div>
-    </div>
-
-    <!-- Sidebar Links -->
     <nav class="sidebar-nav">
       <ul>
         <li>
-          <a href="#" class="nav-link active">
+          <a routerLink="/admin/home" routerLinkActive="active" class="nav-link">
             <span class="nav-icon">📊</span>
             <span class="nav-text">Home</span>
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link">
+          <a routerLink="/admin/hotels" routerLinkActive="active" class="nav-link">
             <span class="nav-icon">🏢</span>
             <span class="nav-text">Hotels</span>
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link">
+          <a routerLink="/admin/rooms" routerLinkActive="active" class="nav-link">
             <span class="nav-icon">🛏️</span>
             <span class="nav-text">Rooms</span>
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link">
+          <a routerLink="/admin/bookings" routerLinkActive="active" class="nav-link">
             <span class="nav-icon">📅</span>
             <span class="nav-text">Bookings</span>
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link">
+          <a routerLink="/admin/guests" routerLinkActive="active" class="nav-link">
             <span class="nav-icon">👥</span>
             <span class="nav-text">Guests</span>
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link">
+          <a routerLink="/admin/settings" routerLinkActive="active" class="nav-link">
             <span class="nav-icon">⚙️</span>
             <span class="nav-text">Settings</span>
           </a>
         </li>
       </ul>
     </nav>
-
-    <!-- Sidebar Footer -->
-    <div class="sidebar-footer">
-      <button class="logout-btn">
-        <span class="nav-icon">🚪</span>
-        <span class="nav-text">Logout</span>
-      </button>
-    </div>
   </aside>
 
-  <!-- Main Content Area next to Sidebar -->
-  <div class="admin-main">
+  <!-- Main Content Column to the Right -->
+  <div class="admin-main-column">
     
-    <!-- Small Topbar for Notifications and Breadcrumbs -->
+    <!-- Top Horizontal Navbar -->
     <header class="admin-topbar">
-      <div class="breadcrumb">
-        <span>Dashboard</span>
+      <div class="topbar-left">
+        <h2 class="welcome-text">Welcome, Admin 👋</h2>
       </div>
-      <div class="topbar-actions">
-        <button class="icon-btn" aria-label="Notifications">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span class="badge">4</span>
+      
+      <div class="topbar-right">
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff" alt="Profile" class="avatar">
+        </div>
+        
+        <!-- Welcome + Logout in Horizontal Nav -->
+        <button class="logout-btn-top">
+          <span class="icon">🚪</span>
+          <span>Logout</span>
         </button>
       </div>
     </header>
 
-    <!-- Router Outlet Wrapper -->
-    <main class="admin-content-wrapper">
-      <div class="admin-content">
-        <router-outlet></router-outlet>
-      </div>
+    <!-- Main Router View Area -->
+    <main class="admin-content-area">
+      <router-outlet></router-outlet>
     </main>
 
-    <!-- Main Content Footer -->
-    <footer class="admin-footer">
-      <p>&copy; 2026 HotelAdmin Software. All rights reserved.</p>
-    </footer>
   </div>
 </div>
