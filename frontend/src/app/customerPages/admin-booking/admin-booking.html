@@ -1,1 +1,101 @@
-<p>admin-booking works!</p>
+<div class="customer-bookings-container">
+
+  <!-- Header Section -->
+  <div class="page-header">
+    <h2>My Reservations</h2>
+    <p>Manage and review your upcoming stays and booking history.</p>
+  </div>
+
+  <div *ngIf="successMessage" class="alert success-alert">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert error-alert">{{ errorMessage }}</div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading && bookings().length === 0">
+    <div class="spinner"></div>
+    <p>Retrieving your reservations...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && bookings().length === 0">
+    <span class="empty-icon">🧳</span>
+    <h3>No Reservations Found</h3>
+    <p>You haven't booked any rooms yet. Explore our premier hotels to find your next luxurious stay.</p>
+    <a href="/customer/rooms" class="btn-primary">Browse Rooms</a>
+  </div>
+
+  <!-- Bookings List -->
+  <div class="bookings-grid" *ngIf="bookings().length > 0">
+    
+    <div class="booking-card" *ngFor="let booking of bookings()" [ngClass]="{'cancelled': booking.bookingStatus === 'Cancelled'}">
+      
+      <div class="card-header">
+        <div class="header-left">
+          <span class="reservation-number">Res #{{ booking.reservationNumber }}</span>
+          <span class="booked-date">Booked on {{ booking.bookedAt | date:'mediumDate' }}</span>
+        </div>
+        
+        <div class="status-badge" [ngClass]="{
+          'status-confirmed': booking.bookingStatus === 'Confirmed' || booking.bookingStatus === 'Pending',
+          'status-cancelled': booking.bookingStatus === 'Cancelled'
+        }">
+          {{ booking.bookingStatus }}
+        </div>
+      </div>
+
+      <div class="card-body">
+        <!-- Optional Chaining safely handles nested relations in case backend lacks Includes -->
+        <h3 class="hotel-name">{{ booking.room?.hotel?.hotelName || 'Grand Horizon Hotel' }}</h3>
+        <p class="hotel-location">📍 {{ booking.room?.hotel?.city || 'Unknown Location' }}</p>
+
+        <div class="room-details">
+          <div class="detail-item">
+            <span class="detail-label">Room Type</span>
+            <span class="detail-value">{{ booking.room?.roomType || 'Standard' }} (Room {{ booking.room?.roomNumber }})</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Guests</span>
+            <span class="detail-value">{{ booking.guestCount }} Person(s)</span>
+          </div>
+        </div>
+
+        <div class="date-range-box">
+          <div class="date-item">
+            <span class="date-label">Check-In</span>
+            <span class="date-value">{{ booking.checkInDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="date-divider">
+            <span class="nights-badge">{{ getDaysDifference(booking.checkInDate, booking.checkOutDate) }} Nights</span>
+          </div>
+          <div class="date-item text-right">
+            <span class="date-label">Check-Out</span>
+            <span class="date-value">{{ booking.checkOutDate | date:'mediumDate' }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-footer">
+        <div class="price-section">
+          <span class="price-label">Total Amount</span>
+          <span class="price-value">${{ booking.totalAmount }}</span>
+        </div>
+
+        <div class="action-section">
+          <button 
+            *ngIf="booking.bookingStatus !== 'Cancelled'" 
+            class="btn-cancel-reservation" 
+            (click)="cancelBooking(booking.bookingId)"
+            [disabled]="isLoading">
+            Cancel Reservation
+          </button>
+          
+          <span class="cancelled-text" *ngIf="booking.bookingStatus === 'Cancelled'">
+            Reservation Terminated
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

@@ -10,16 +10,17 @@
       </div>
       
       <nav class="navbar-links">
-        <a href="#" class="nav-item active">Home</a>
-        <a href="#" class="nav-item">Destinations</a>
-        <a href="#" class="nav-item">Special Offers</a>
-        <a href="#" class="nav-item">About Us</a>
-        <a href="#" class="nav-item">Contact</a>
+        <a routerLink="home" routerLinkActive="active" class="nav-item">Home</a>
+        <a routerLink="rooms" routerLinkActive="active" class="nav-item">Rooms</a>
+        <a routerLink="booking" routerLinkActive="active" class="nav-item">Bookings</a>
+        <a routerLink="about" routerLinkActive="active" class="nav-item">About Us</a>
+        <a routerLink="contact" routerLinkActive="active" class="nav-item">Contact</a>
       </nav>
       
       <div class="navbar-actions">
-        <button class="btn-outline">Log in</button>
-        <button class="btn-primary">Book Now</button>
+        <span class="user-greeting" style="margin-right: 15px; font-weight: 500; color: var(--text-muted); font-size: 15px;">Hi, {{ userName }}</span>
+        <a routerLink="profile" class="btn-outline" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Profile</a>
+        <button class="btn-primary" (click)="logout()">Log out</button>
       </div>
       
       <!-- Mobile menu toggle -->

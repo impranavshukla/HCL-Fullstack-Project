@@ -285,3 +285,24 @@ h1, h2, h3 {
     padding: 32px 20px;
   }
 }
+
+/* ── Alerts ── */
+.error-alert {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 10px;
+  border: 1px solid #fecaca;
+}
+
+.success-alert {
+  background-color: #f0fdf4;
+  color: #15803d;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 10px;
+  border: 1px solid #bbf7d0;
+}

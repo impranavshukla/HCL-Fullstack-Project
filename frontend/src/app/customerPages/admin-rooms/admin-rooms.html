@@ -1,1 +1,157 @@
-<p>admin-rooms works!</p>
+<div class="customer-rooms-container">
+
+  <!-- Header Banner -->
+  <div class="header-banner">
+    <div class="header-content">
+      <h2>Discover Your Perfect Stay</h2>
+      <p>Find luxury rooms across our premier hotel locations tailored to your preferences.</p>
+    </div>
+  </div>
+
+  <div *ngIf="successMessage" class="alert success-alert">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert error-alert">{{ errorMessage }}</div>
+
+  <div class="main-grid">
+    
+    <!-- Sidebar Filters -->
+    <aside class="filters-sidebar">
+      <h3>Filter Results</h3>
+      
+      <div class="filter-group">
+        <label>Destination City</label>
+        <input type="text" [(ngModel)]="localFilter.city" placeholder="e.g. New York">
+      </div>
+
+      <div class="filter-group">
+        <label>Room Type</label>
+        <select [(ngModel)]="localFilter.type">
+          <option value="">Any Type</option>
+          <option value="Single">Single</option>
+          <option value="Double">Double</option>
+          <option value="Suite">Suite</option>
+          <option value="Penthouse">Penthouse</option>
+          <option value="Deluxe">Deluxe</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Max Price / Night ($)</label>
+        <div class="range-wrapper">
+          <input type="range" [(ngModel)]="localFilter.maxPrice" min="50" max="2000" step="50" class="price-slider">
+          <span class="range-value" *ngIf="localFilter.maxPrice">${{ localFilter.maxPrice }}</span>
+          <span class="range-value" *ngIf="!localFilter.maxPrice">Any</span>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Minimum Guests</label>
+        <input type="number" [(ngModel)]="localFilter.minCapacity" min="1" max="10" placeholder="e.g. 2">
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-clear" (click)="resetFilters()">Clear</button>
+        <button class="btn-apply" (click)="applyFilters()">Apply Filters</button>
+      </div>
+    </aside>
+
+    <!-- Rooms List -->
+    <section class="rooms-feed">
+      <div class="feed-header">
+        <h3>Available Rooms <span class="count-badge">{{ filteredRooms().length }}</span></h3>
+      </div>
+
+      <div class="loading-state" *ngIf="isLoading && rooms().length === 0">
+        Finding luxurious spaces for you...
+      </div>
+
+      <div class="empty-state" *ngIf="!isLoading && filteredRooms().length === 0">
+        <span class="empty-icon">🔍</span>
+        <p>No rooms match your current filters.</p>
+        <button class="btn-clear empty-btn" (click)="resetFilters()">Reset Filters</button>
+      </div>
+
+      <div class="room-cards">
+        <div class="room-card" *ngFor="let room of filteredRooms()">
+          <div class="card-image">
+            <div class="price-tag">${{ room.pricePerNight }}<small>/night</small></div>
+            <!-- Dynamic placeholder image based on Room Type -->
+            <img [src]="'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=80'" alt="Room Image" *ngIf="room.roomType === 'Double'">
+            <img [src]="'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80'" alt="Room Image" *ngIf="room.roomType === 'Suite'">
+            <img [src]="'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80'" alt="Room Image" *ngIf="room.roomType !== 'Double' && room.roomType !== 'Suite'">
+          </div>
+          
+          <div class="card-content">
+            <div class="card-header">
+              <span class="hotel-location">📍 {{ getHotel(room.hotelId)?.city }}</span>
+              <h4 class="hotel-title">{{ getHotel(room.hotelId)?.hotelName }}</h4>
+            </div>
+            
+            <h5 class="room-type-title">{{ room.roomType }} Room</h5>
+            
+            <div class="room-features">
+              <span class="feature"><span class="icon">👥</span> Up to {{ room.capacity }} Guests</span>
+              <span class="feature" *ngIf="room.amenitiesText"><span class="icon">✨</span> {{ room.amenitiesText }}</span>
+            </div>
+
+            <button class="btn-book" (click)="openBookingModal(room)">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Booking Modal Overlay -->
+<div class="modal-overlay" *ngIf="isBookingModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Complete Your Booking</h3>
+      <button class="close-btn" (click)="closeBookingModal()">✕</button>
+    </div>
+
+    <div class="modal-body" *ngIf="selectedRoom">
+      
+      <div class="booking-summary-box">
+        <h4>{{ getHotel(selectedRoom.hotelId)?.hotelName }}</h4>
+        <p>{{ selectedRoom.roomType }} Room - ${{ selectedRoom.pricePerNight }} / night</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Check-in Date *</label>
+          <input type="date" [(ngModel)]="checkInDate" (change)="onDatesChange()">
+        </div>
+        <div class="form-group">
+          <label>Check-out Date *</label>
+          <input type="date" [(ngModel)]="checkOutDate" (change)="onDatesChange()">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Number of Guests * (Max: {{ selectedRoom.capacity }})</label>
+        <input type="number" [(ngModel)]="guestCount" min="1" [max]="selectedRoom.capacity">
+      </div>
+
+      <div class="booking-totals" *ngIf="totalDays > 0">
+        <div class="total-row">
+          <span>${{ selectedRoom.pricePerNight }} × {{ totalDays }} nights</span>
+          <span>${{ totalAmount }}</span>
+        </div>
+        <div class="total-row grand-total">
+          <span>Total</span>
+          <span>${{ totalAmount }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeBookingModal()">Cancel</button>
+      <button class="btn-confirm" (click)="submitBooking()" [disabled]="isLoading || totalDays === 0">
+        <span *ngIf="!isLoading">Confirm Reservation</span>
+        <span *ngIf="isLoading">Processing...</span>
+      </button>
+    </div>
+  </div>
+</div>

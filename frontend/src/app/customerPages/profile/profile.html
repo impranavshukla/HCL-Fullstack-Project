@@ -1,0 +1,52 @@
+<div class="profile-container">
+  
+  <div class="header-section">
+    <h2>My Profile</h2>
+    <p>View and manage your account details securely.</p>
+  </div>
+
+  <div class="profile-card" *ngIf="user()">
+    
+    <!-- Profile Visual Identity -->
+    <div class="profile-header-banner">
+      <div class="avatar-wrapper">
+        <img [src]="getAvatarUrl()" alt="User Avatar" class="profile-avatar">
+      </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="profile-body">
+      <h3>Personal Information</h3>
+      
+      <div class="info-grid">
+        <div class="info-group">
+          <label>Full Name</label>
+          <div class="info-value">{{ user()?.full_name }}</div>
+        </div>
+        
+        <div class="info-group">
+          <label>Email Address</label>
+          <div class="info-value">{{ user()?.email }}</div>
+        </div>
+
+        <div class="info-group">
+          <label>Account Role</label>
+          <div class="info-value badge-role">{{ user()?.role | titlecase }}</div>
+        </div>
+
+        <div class="info-group">
+          <label>System Usage ID</label>
+          <div class="info-value text-mono">#{{ user()?.user_id }}</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="empty-state" *ngIf="!user()">
+    <h3>Authentication Error</h3>
+    <p>We couldn't retrieve your profile data. Please try logging in again.</p>
+  </div>
+
+</div>

@@ -1,1 +1,105 @@
-<p>admin-home works!</p>
+<!-- Customer Landing Page -->
+<div class="landing-container">
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Experience Unrivaled Luxury.</h1>
+      <p>Discover world-class destinations, premium suites, and unforgettable memories at LuxeStay Hotels.</p>
+      
+      <div class="hero-actions">
+        <a routerLink="/customer/rooms" class="btn-primary hero-btn">Explore Rooms</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stretch Feature: Promotional Ribbon -->
+  <section class="promo-ribbon">
+    <div class="promo-content">
+      <div class="promo-icon">🎁</div>
+      <div class="promo-text">
+        <strong>Seasonal Offer:</strong> Apply code <span>LUXE20</span> at checkout for an exclusive 20% discount on your first booking!
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Amenities Snapshot -->
+  <section class="amenities-snapshot">
+    <div class="snapshot-item">
+      <span class="emoji-icon">🏊‍♂️</span>
+      <h4>Infinity Pools</h4>
+      <p>Relax in our temperature-controlled arrays.</p>
+    </div>
+    <div class="snapshot-item">
+      <span class="emoji-icon">🍽️</span>
+      <h4>Fine Dining</h4>
+      <p>Michelin-starred restaurant experiences.</p>
+    </div>
+    <div class="snapshot-item">
+      <span class="emoji-icon">💆‍♀️</span>
+      <h4>Luxury Spa</h4>
+      <p>Award-winning wellness treatments.</p>
+    </div>
+    <div class="snapshot-item">
+      <span class="emoji-icon">🛎️</span>
+      <h4>24/7 Concierge</h4>
+      <p>Personalized service at your fingertips.</p>
+    </div>
+  </section>
+
+  <div class="sections-wrapper">
+    
+    <!-- Featured Destinations (Hotels) -->
+    <section class="curated-section">
+      <div class="section-header">
+        <h2>Featured Destinations</h2>
+        <a routerLink="/customer/rooms" class="view-all-link">View All Location Rooms &rarr;</a>
+      </div>
+
+      <div class="horizontal-cards-grid" *ngIf="featuredHotels().length > 0">
+        <div class="destination-card" *ngFor="let hotel of featuredHotels(); let i = index">
+          <div class="dest-image">
+            <div class="rating-badge" *ngIf="hotel.rating">★ {{ hotel.rating }}</div>
+            <img [src]="'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=600&q=80'" alt="Hotel Exterior" *ngIf="i===0">
+            <img [src]="'https://images.unsplash.com/photo-1551882547-ff40c0d5b5df?auto=format&fit=crop&w=600&q=80'" alt="Hotel Exterior" *ngIf="i===1">
+            <img [src]="'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600&q=80'" alt="Hotel Exterior" *ngIf="i>1">
+          </div>
+          <div class="dest-info">
+            <h3>{{ hotel.hotelName }}</h3>
+            <p class="dest-city">📍 {{ hotel.city }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="empty-state" *ngIf="!isLoading && featuredHotels().length === 0">
+        <p>No featured destinations available right now.</p>
+      </div>
+    </section>
+
+    <!-- Premium Rooms Teaser -->
+    <section class="curated-section">
+      <div class="section-header">
+        <h2>Premium Availability</h2>
+        <p class="section-subtitle">Our most luxurious spaces currently ready for reservation.</p>
+      </div>
+
+      <div class="horizontal-cards-grid rooms-grid" *ngIf="featuredRooms().length > 0">
+        <div class="premium-room-card" *ngFor="let room of featuredRooms(); let j = index">
+          <div class="room-img-container">
+            <div class="price-layer">${{ room.pricePerNight }}<small>/nt</small></div>
+            <img [src]="'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80'" *ngIf="j===0">
+            <img [src]="'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=600&q=80'" *ngIf="j===1">
+            <img [src]="'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80'" *ngIf="j>1">
+          </div>
+          <div class="premium-room-info">
+            <div class="room-type-tag">{{ room.roomType }} Suite</div>
+            <span class="capacity-info">👥 {{ room.capacity }} Guests</span>
+            <a routerLink="/customer/rooms" class="btn-book-quick">Book Standard & Premium</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

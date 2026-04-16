@@ -1,1 +1,85 @@
-<p>hotels works!</p>
+<div class="admin-hotels-container">
+  <div class="header-section">
+    <h2>Hotel Management</h2>
+    <p>Add, edit, or remove hotels from the Grand Horizon network.</p>
+  </div>
+
+  <!-- Alerts -->
+  <div *ngIf="successMessage" class="alert success-alert">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert error-alert">{{ errorMessage }}</div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    
+    <!-- Left Column: Form -->
+    <div class="form-card">
+      <h3>{{ isEditing ? 'Edit Hotel' : 'Add New Hotel' }}</h3>
+      <form (ngSubmit)="onSubmit()" #hotelForm="ngForm">
+        
+        <div class="form-group">
+          <label>Hotel Name *</label>
+          <input type="text" name="hotelName" [(ngModel)]="currentHotel.hotelName" required placeholder="Enter hotel name">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" name="city" [(ngModel)]="currentHotel.city" required placeholder="E.g., New York">
+          </div>
+          <div class="form-group">
+            <label>Rating</label>
+            <input type="number" name="rating" [(ngModel)]="currentHotel.rating" step="0.1" min="0" max="5" placeholder="0.0 - 5.0">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Address *</label>
+          <input type="text" name="address" [(ngModel)]="currentHotel.address" required placeholder="Full street address">
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" [(ngModel)]="currentHotel.description" rows="4" placeholder="About this hotel..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" *ngIf="isEditing" (click)="resetForm()">Cancel Edit</button>
+          <button type="submit" class="btn-submit" [disabled]="isLoading">
+            {{ isEditing ? 'Update Hotel' : 'Create Hotel' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right Column: List -->
+    <div class="list-card">
+      <h3>Managed Hotels</h3>
+      <div class="loading-state" *ngIf="isLoading && hotels().length === 0">
+        Loading hotels...
+      </div>
+      
+      <div class="empty-state" *ngIf="!isLoading && hotels().length === 0">
+        No hotels found. Add your first hotel using the form.
+      </div>
+
+      <div class="hotel-list" *ngIf="hotels().length > 0">
+        <div class="hotel-item" *ngFor="let hotel of hotels()">
+          <div class="hotel-info">
+            <h4>{{ hotel.hotelName }}</h4>
+            <p class="hotel-location">
+              <span class="icon">📍</span> {{ hotel.city }} - {{ hotel.address }}
+            </p>
+            <div class="hotel-meta">
+              <span class="rating" *ngIf="hotel.rating"><span class="star">★</span> {{ hotel.rating }}</span>
+            </div>
+          </div>
+          <div class="hotel-actions">
+            <button class="btn-icon edit" title="Edit" (click)="editHotel(hotel)">✏️</button>
+            <button class="btn-icon delete" title="Delete" (click)="deleteHotel(hotel.hotelId)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

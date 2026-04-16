@@ -1,1 +1,121 @@
-<p>rooms works!</p>
+<div class="admin-rooms-container">
+  <div class="header-section">
+    <h2>Room Management</h2>
+    <p>Manage rooms across all your registered properties.</p>
+  </div>
+
+  <div *ngIf="successMessage" class="alert success-alert">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert error-alert">{{ errorMessage }}</div>
+
+  <div class="content-grid">
+    
+    <div class="form-card">
+      <h3>{{ isEditing ? 'Edit Room' : 'Add New Room' }}</h3>
+      <form (ngSubmit)="onSubmit()" #roomForm="ngForm">
+        
+        <div class="form-group">
+          <label>Assign to Hotel *</label>
+          <select name="hotelId" [(ngModel)]="currentRoom.hotelId" required>
+            <option [ngValue]="0" disabled>Select a Hotel</option>
+            <option *ngFor="let hotel of hotels()" [ngValue]="hotel.hotelId">
+              {{ hotel.hotelName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Room Number *</label>
+            <input type="text" name="roomNumber" [(ngModel)]="currentRoom.roomNumber" required placeholder="e.g., 101, 102B">
+          </div>
+          <div class="form-group">
+            <label>Room Type *</label>
+            <select name="roomType" [(ngModel)]="currentRoom.roomType" required>
+              <option value="" disabled>Select Type</option>
+              <option value="Single">Single</option>
+              <option value="Double">Double</option>
+              <option value="Suite">Suite</option>
+              <option value="Penthouse">Penthouse</option>
+              <option value="Deluxe">Deluxe</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price Per Night ($) *</label>
+            <input type="number" name="price" [(ngModel)]="currentRoom.pricePerNight" required min="0" step="0.01" placeholder="e.g. 150.00">
+          </div>
+          <div class="form-group">
+            <label>Capacity *</label>
+            <input type="number" name="capacity" [(ngModel)]="currentRoom.capacity" required min="1" max="20" placeholder="Number of guests">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" name="isAvailable" [(ngModel)]="currentRoom.isAvailable">
+            <span class="custom-checkbox"></span>
+            Is this room currently available?
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Amenities</label>
+          <input type="text" name="amenitiesText" [(ngModel)]="currentRoom.amenitiesText" placeholder="e.g. WiFi, Sea View, Balcony">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" *ngIf="isEditing" (click)="resetForm()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="isLoading">
+            {{ isEditing ? 'Update Room' : 'Create Room' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right Column: List -->
+    <div class="list-card">
+      <h3>All Managed Rooms</h3>
+      <div class="loading-state" *ngIf="isLoading && rooms().length === 0">
+        Loading rooms...
+      </div>
+      
+      <div class="empty-state" *ngIf="!isLoading && rooms().length === 0">
+        No rooms assigned yet. Add one using the form.
+      </div>
+
+      <div class="room-list" *ngIf="rooms().length > 0">
+        <div class="room-item" *ngFor="let room of rooms()">
+          <div class="room-info">
+            <div class="room-header-row">
+              <h4>Room {{ room.roomNumber }} <span class="room-type-badge">{{ room.roomType }}</span></h4>
+              <span class="availability-badge" [class.available]="room.isAvailable" [class.unavailable]="!room.isAvailable">
+                {{ room.isAvailable ? 'Available' : 'Unavailable' }}
+              </span>
+            </div>
+            
+            <p class="room-hotel">
+              <span class="icon">🏨</span> {{ getHotelName(room.hotelId) }}
+            </p>
+
+            <div class="room-meta">
+              <span><strong>Capacity:</strong> {{ room.capacity }} Person(s)</span>
+              <span><strong>Price:</strong> ${{ room.pricePerNight }} / night</span>
+            </div>
+
+            <p class="room-amenities" *ngIf="room.amenitiesText">
+              <span class="icon">✨</span> {{ room.amenitiesText }}
+            </p>
+          </div>
+          
+          <div class="room-actions">
+            <button class="btn-icon edit" title="Edit" (click)="editRoom(room)">✏️</button>
+            <button class="btn-icon delete" title="Delete" (click)="deleteRoom(room.roomId)">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

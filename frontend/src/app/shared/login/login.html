@@ -24,11 +24,11 @@
         <p>Please enter your credentials to login.</p>
       </div>
       
-      <form class="login-form">
+      <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
         <div class="input-group">
           <label for="email">Email Address</label>
           <div class="input-wrapper">
-            <input type="email" id="email" name="email" placeholder="student@example.com" required>
+            <input type="email" id="email" name="email" placeholder="guest@grandhorizon.com" required [(ngModel)]="loginData.email">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="input-icon">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
@@ -38,16 +38,19 @@
         <div class="input-group">
           <label for="password">Password</label>
           <div class="input-wrapper">
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required [(ngModel)]="loginData.password">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="input-icon">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
         </div>
         
-        <button type="button" class="login-btn">
-          <span>Sign In to Your Account</span>
-          <svg fill="currentColor" viewBox="0 0 20 20" class="btn-icon"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        <div *ngIf="errorMessage" class="error-alert">{{ errorMessage }}</div>
+
+        <button type="submit" class="login-btn" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Sign In to Your Account</span>
+          <span *ngIf="isLoading">Signing In...</span>
+          <svg *ngIf="!isLoading" fill="currentColor" viewBox="0 0 20 20" class="btn-icon"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
         </button>
       </form>
       
