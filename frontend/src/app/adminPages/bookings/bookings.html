@@ -1,119 +1,109 @@
-<div class="bookings-container">
-  <div class="page-header">
-    <div class="header-text">
-      <h2 class="page-title">Booking Management</h2>
-      <p class="page-subtitle">View and manage all customer hotel reservations globally.</p>
-    </div>
-    
-    <div class="header-actions">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" placeholder="Search by RES number...">
-      </div>
-      <button class="btn-primary">
-        <span class="icon">⬇️</span>
-        <span>Export CSV</span>
-      </button>
+<div class="admin-dashboard-container">
+  
+  <div class="header-section">
+    <div>
+      <h2>Reservation Management</h2>
+      <p>View, cancel, or permanently erase customer hotel bookings.</p>
     </div>
   </div>
 
-  <div class="bookings-card">
-    <div class="table-container">
-      <table class="bookings-table">
+  <div *ngIf="successMessage" class="alert success-alert">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert error-alert">{{ errorMessage }}</div>
+
+  <!-- Command Toolbar -->
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search by reservation #, guest name, or hotel..." (input)="updateSearch($event)">
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading && bookings().length === 0">
+    <div class="spinner"></div>
+    <p>Retrieving database records...</p>
+  </div>
+
+  <!-- Data Table -->
+  <div class="data-card" *ngIf="!isLoading || bookings().length > 0">
+    <div class="table-responsive">
+      <table class="admin-table">
         <thead>
           <tr>
-            <th>RES / BOOKING ID</th>
-            <th>CUSTOMER ID</th>
-            <th>ROOM ID</th>
-            <th>CHECK-IN</th>
-            <th>CHECK-OUT</th>
-            <th>GUESTS</th>
-            <th>AMOUNT</th>
-            <th>STATUS</th>
-            <th>BOOKED AT</th>
-            <th>ACTIONS</th>
+            <th>Res #</th>
+            <th>Booking Details</th>
+            <th>Guest Info</th>
+            <th>Dates</th>
+            <th>Revenue</th>
+            <th>Status</th>
+            <th class="actions-col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Dummy row 1: Confirmed -->
-          <tr>
+          <tr *ngFor="let b of filteredBookings()" [ngClass]="{'cancelled-row': b.bookingStatus === 'Cancelled'}">
+            
+            <td class="res-number">
+              <span class="hash">#</span>{{ b.reservationNumber }}
+              <div class="sub-text">{{ b.bookedAt | date:'shortTime' }}</div>
+            </td>
+
             <td>
-              <div class="res-info">
-                <span class="res-number">RES-589A2</span>
-                <span class="booking-id">ID: 1042</span>
+              <div class="primary-text">{{ b.room?.hotel?.hotelName || 'Unknown Hotel' }}</div>
+              <div class="sub-text">Room {{ b.room?.roomNumber }} &bull; {{ b.room?.roomType }}</div>
+            </td>
+
+            <td>
+              <div class="primary-text">{{ b.customer?.full_name || 'Guest' }}</div>
+              <div class="sub-text">{{ b.guestCount }} Person(s)</div>
+            </td>
+
+            <td>
+              <div class="date-block">
+                <span class="date-label">IN:</span> {{ b.checkInDate | date:'MMM d, y' }}
+              </div>
+              <div class="date-block">
+                <span class="date-label">OUT:</span> {{ b.checkOutDate | date:'MMM d, y' }}
               </div>
             </td>
-            <td>#51 (John D.)</td>
-            <td>Row-204</td>
-            <td><span class="date-text">15 Oct 2026</span></td>
-            <td><span class="date-text">20 Oct 2026</span></td>
-            <td>2</td>
-            <td class="amount">$450.00</td>
-            <td><span class="badge status-confirmed">Confirmed</span></td>
-            <td><span class="time-text">12 Oct 2026, 14:30</span></td>
-            <td>
-              <button class="action-btn" title="View"><span class="icon">👁️</span></button>
-              <button class="action-btn edit" title="Edit"><span class="icon">✏️</span></button>
+
+            <td class="revenue-text">
+              ${{ b.totalAmount }}
             </td>
-          </tr>
-          
-          <!-- Dummy row 2: Pending -->
-          <tr>
+
             <td>
-              <div class="res-info">
-                <span class="res-number">RES-77B19</span>
-                <span class="booking-id">ID: 1043</span>
+              <span class="status-badge" [ngClass]="{
+                'status-confirmed': b.bookingStatus === 'Confirmed' || b.bookingStatus === 'Pending',
+                'status-cancelled': b.bookingStatus === 'Cancelled'
+              }">
+                {{ b.bookingStatus }}
+              </span>
+            </td>
+
+            <td class="actions-cell">
+              <div class="action-buttons">
+                <!-- Cancel strictly if it is NOT yet cancelled -->
+                <button *ngIf="b.bookingStatus !== 'Cancelled'" 
+                        class="btn-action btn-warning" 
+                        title="Cancel Reservation (Frees Room)"
+                        (click)="cancelBooking(b.bookingId)">
+                  Cancel
+                </button>
+                
+                <button class="btn-action btn-danger" 
+                        title="Permanently Delete Record"
+                        (click)="deleteRecord(b.bookingId)">
+                  Delete
+                </button>
               </div>
-            </td>
-            <td>#32 (Sarah S.)</td>
-            <td>Row-105</td>
-            <td><span class="date-text">18 Oct 2026</span></td>
-            <td><span class="date-text">19 Oct 2026</span></td>
-            <td>1</td>
-            <td class="amount">$120.50</td>
-            <td><span class="badge status-pending">Pending</span></td>
-            <td><span class="time-text">14 Oct 2026, 09:15</span></td>
-            <td>
-              <button class="action-btn" title="View"><span class="icon">👁️</span></button>
-              <button class="action-btn edit" title="Edit"><span class="icon">✏️</span></button>
-            </td>
-          </tr>
-          
-          <!-- Dummy row 3: Cancelled -->
-          <tr>
-            <td>
-              <div class="res-info">
-                <span class="res-number">RES-990C3</span>
-                <span class="booking-id">ID: 1044</span>
-              </div>
-            </td>
-            <td>#78 (Micheal J.)</td>
-            <td>Row-301</td>
-            <td><span class="date-text">01 Nov 2026</span></td>
-            <td><span class="date-text">05 Nov 2026</span></td>
-            <td>4</td>
-            <td class="amount">$1,200.00</td>
-            <td><span class="badge status-cancelled">Cancelled</span></td>
-            <td><span class="time-text">15 Oct 2026, 18:45</span></td>
-            <td>
-              <button class="action-btn" title="View"><span class="icon">👁️</span></button>
-              <button class="action-btn edit" title="Edit"><span class="icon">✏️</span></button>
             </td>
           </tr>
         </tbody>
       </table>
-    </div>
-    
-    <div class="pagination">
-      <span class="page-info">Showing 1 to 3 of 124 entries</span>
-      <div class="page-controls">
-        <button class="page-btn disabled">Prev</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">...</button>
-        <button class="page-btn">Next</button>
+
+      <div class="empty-state" *ngIf="filteredBookings().length === 0">
+        <span class="empty-icon">📁</span>
+        <p>No bookings match your current criteria.</p>
       </div>
+
     </div>
   </div>
 </div>
