@@ -1,11 +1,11 @@
-# 🏨 StayEase – Smart Hotel Booking System
+#  StayEase – Smart Hotel Booking System
 
 > A Full-Stack Hotel Booking Platform built with **ASP.NET Core + Angular**  
 > Designed for scalability, performance, and real-world business workflows.
 
 ---
 
-## 🌟 Project Vision
+##  Project Vision
 
 StayEase aims to simplify hotel booking by providing a seamless platform where users can:
 
@@ -16,7 +16,7 @@ StayEase aims to simplify hotel booking by providing a seamless platform where u
 
 ---
 
-## 🧠 System Flow (High Level)
+##  System Flow (High Level)
 
 ```mermaid
 flowchart LR
@@ -29,7 +29,7 @@ flowchart LR
 
 ---
 
-## 🔄 Booking Flow (Core Logic)
+##  Booking Flow (Core Logic)
 
 ```mermaid
 flowchart TD
@@ -46,7 +46,7 @@ flowchart TD
 
 ---
 
-## 🧩 Core Features
+##  Core Features
 
 ### 🔹 Customer Features
 
@@ -64,7 +64,7 @@ flowchart TD
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Backend
 
@@ -87,7 +87,7 @@ flowchart TD
 
 ---
 
-## 🏗️ Architecture Overview
+##  Architecture Overview
 
 ```mermaid
 flowchart TB
@@ -103,9 +103,9 @@ flowchart TB
 
 ---
 
-## 🗄️ Database Design
+##  Database Design
 
-### 📌 Tables
+###  Tables
 
 * Users (Customers)
 * Hotels
@@ -115,7 +115,7 @@ flowchart TB
 
 ---
 
-### 🔗 Relationships
+###  Relationships
 
 ```mermaid
 erDiagram
@@ -153,9 +153,9 @@ erDiagram
 
 ---
 
-## 🔌 API Structure
+##  API Structure
 
-### 🏨 Hotels
+###  Hotels
 
 * `GET /api/hotels` → Fetch all hotels
 * `GET /api/hotels/{id}` → Get hotel details
@@ -165,7 +165,7 @@ erDiagram
 
 ---
 
-### 🛏️ Rooms
+###  Rooms
 
 * `GET /api/rooms` → Fetch all rooms
 * `GET /api/rooms/{id}` → Get room
@@ -177,7 +177,7 @@ erDiagram
 
 ---
 
-### 📅 Bookings
+###  Bookings
 
 * `GET /api/bookings` → All bookings
 * `GET /api/bookings/{id}` → Booking details
@@ -188,7 +188,7 @@ erDiagram
 
 ---
 
-### 🧾 Amenities
+###  Amenities
 
 * `GET /api/amenities` → List amenities
 * `POST /api/amenities` → Add amenity
@@ -197,7 +197,7 @@ erDiagram
 
 ---
 
-## ⚙️ Booking Execution Logic
+##  Booking Execution Logic
 
 ```mermaid
 sequenceDiagram
@@ -220,7 +220,7 @@ sequenceDiagram
 
 ---
 
-## ▶️ Run the Project
+##  Run the Project
 
 ### Backend
 
@@ -248,7 +248,7 @@ http://localhost:4200
 
 ---
 
-## 🗃️ Database Setup (Code First)
+##  Database Setup (Code First)
 
 ```bash
 Add-Migration InitialCreate
@@ -257,16 +257,16 @@ Update-Database
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 * Swagger UI → Auto-loaded
 * Postman → Use API endpoints
 
 ---
 
-## 🔐 Future Enhancements
+##  Future Enhancements
 
-* JWT Authentication 🔑
+* JWT Authentication 
 * Role-based Authorization
 * Payment Gateway
 * Email Notifications
@@ -275,7 +275,7 @@ Update-Database
 
 ---
 
-## 📈 Key Learnings
+##  Key Learnings
 
 * Full Stack Development (.NET + Angular)
 * REST API Design
@@ -286,11 +286,11 @@ Update-Database
 
 ---
 
-## 👥 Team Singularity
+##  Team Singularity
 
 **Team Name:** *Singularity* 
 
-### 👨‍💻 Members
+###  Members
 
 * Pranav Shukla
 * Kushagra Chandel
@@ -299,7 +299,7 @@ Update-Database
 
 ---
 
-## 📌 Final Note
+##  Final Note
 
 This project demonstrates a **real-world scalable booking system** with clean architecture, modular design, and extensibility for enterprise use.
 
@@ -307,8 +307,7 @@ This project demonstrates a **real-world scalable booking system** with clean ar
 
 ## 🔗 Repository
 
-👉 [https://github.com/impranavshukla/HCL-Fullstack-Project](https://github.com/impranavshukla/HCL-Fullstack-Project)
+ [https://github.com/impranavshukla/HCL-Fullstack-Project](https://github.com/impranavshukla/HCL-Fullstack-Project)
 
-```
 
 
