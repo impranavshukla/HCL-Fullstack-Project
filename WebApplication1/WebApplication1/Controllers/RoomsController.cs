@@ -16,6 +16,7 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
+
         // GET: api/rooms
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rooms>>> GetRooms()
